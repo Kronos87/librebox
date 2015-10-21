@@ -32,16 +32,23 @@ void mainLoop() {
 			int ydiff = event.xbutton.y_root - btnEvnt.y_root;
 			
 			if(btnEvnt.button == 1) {
+				XGetWindowAttributes(display, btnEvnt.subwindow, &attr);
+				
 				if(event.xbutton.y_root <= 1) {
-					XGetWindowAttributes(display, btnEvnt.subwindow, &attr);
 					lastWidth = attr.width;
 					lastHeight = attr.height;
 					XMoveResizeWindow(display, btnEvnt.subwindow, 0, 0, screen->width, screen->height);
 				} else {
+					//TODO workaroung
+					if(lastWidth == 0) {
+						lastWidth = attr.width;	
+						lastHeight = attr.height;
+					}
+					
 					XMoveResizeWindow(display, btnEvnt.subwindow, MAX(1, attr.x + xdiff), MAX(1, attr.y + ydiff), lastWidth, lastHeight);
 				}
 			} else if(btnEvnt.button == 3) {
-				XMoveWindow(display, btnEvnt.subwindow, attr.x, attr.y);
+				XMoveResizeWindow(display, btnEvnt.subwindow, attr.x, attr.y, MAX(1, attr.width + xdiff), MAX(1, attr.height + ydiff));
 			}
 			
 		} else if(event.type == ButtonRelease) {
