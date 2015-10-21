@@ -13,6 +13,8 @@ XButtonEvent btnEvnt;
 
 int lastWidth = 0, lastHeight = 0;
 
+int loosing = 0;
+
 void mainLoop() {
 	
 	int running = 1;
@@ -35,7 +37,7 @@ void mainLoop() {
 			if(btnEvnt.button == 1) {
 				XGetWindowAttributes(display, btnEvnt.subwindow, &attr);
 				
-				if(attr.y <= 1) {
+				if(attr.y <= 1 && !loosing) {
 					lastWidth = attr.width;
 					lastHeight = attr.height;
 					XMoveResizeWindow(display, btnEvnt.subwindow, 0, 0, screen->width, screen->height);
@@ -47,6 +49,9 @@ void mainLoop() {
 					}
 					
 					XMoveResizeWindow(display, btnEvnt.subwindow, MAX(1, attr1.x + xdiff), MAX(1, attr1.y + ydiff), lastWidth, lastHeight);
+					
+					//Move and loose from Top
+					loosing = 1;
 				}
 			} else if(btnEvnt.button == 3) {
 				//Resize
@@ -58,6 +63,8 @@ void mainLoop() {
 		} else if(event.type == ButtonRelease) {
 			XSetWindowBorderWidth(display, btnEvnt.subwindow, 0);
 			btnEvnt.subwindow = None;
+			
+			loosing = 1;
 		}
 	}
 	
