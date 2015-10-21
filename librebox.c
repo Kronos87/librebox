@@ -37,7 +37,7 @@ void mainLoop() {
 			
 			if(btnEvnt.button == 1) {
 				if(event.xbutton.y_root <= 1) {
-					XMoveResizeWindow(display, btnEvnt.subwindow, 0, 0, )
+					XMoveResizeWindow(display, btnEvnt.subwindow, 0, 0, screen->width, screen->height);
 				}
 			}
 			
