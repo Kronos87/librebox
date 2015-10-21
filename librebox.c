@@ -49,7 +49,10 @@ void mainLoop() {
 					XMoveResizeWindow(display, btnEvnt.subwindow, MAX(1, attr1.x + xdiff), MAX(1, attr1.y + ydiff), lastWidth, lastHeight);
 				}
 			} else if(btnEvnt.button == 3) {
-				XMoveResizeWindow(display, btnEvnt.subwindow, attr1.x, attr1.y, MAX(1, attr1.width + xdiff), MAX(1, attr1.height + ydiff));
+				//Resize
+				lastWidth = MAX(1, attr1.width + xdiff);
+				lastHeight = MAX(1, attr1.height + ydiff);
+				XMoveResizeWindow(display, btnEvnt.subwindow, attr1.x, attr1.y, lastWidth, lastHeight);
 			}
 			
 		} else if(event.type == ButtonRelease) {
