@@ -35,7 +35,7 @@ void mainLoop() {
 			if(btnEvnt.button == 1) {
 				XGetWindowAttributes(display, btnEvnt.subwindow, &attr);
 				
-				if(event.xbutton.y_root <= 1) {
+				if(attr.y <= 1) {
 					lastWidth = attr.width;
 					lastHeight = attr.height;
 					XMoveResizeWindow(display, btnEvnt.subwindow, 0, 0, screen->width, screen->height);
