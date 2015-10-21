@@ -10,6 +10,8 @@ XEvent event;
 XWindowAttributes attr;
 XButtonEvent btnEvnt;
 
+int lastWidth = 0, lastHeight = 0;
+
 void mainLoop() {
 	
 	int running = 1;
@@ -27,11 +29,14 @@ void mainLoop() {
 			int xdiff = event.xbutton.x_root - btnEvnt.x_root;
 			int ydiff = event.xbutton.y_root - btnEvnt.y_root;
 			
+			lastWidth = MAX(1, attr.width + (btnEvnt.button == 3 ? xdiff : 0));
+			lastHeight = MAX(1, attr.height + (btnEvnt.button == 3 ? ydiff : 0));
+			
 			XMoveResizeWindow(display, btnEvnt.subwindow, 
 				attr.x + (btnEvnt.button == 1 ? xdiff : 0),
 				attr.y + (btnEvnt.button == 1 ? ydiff : 0),
-				MAX(1, attr.width + (btnEvnt.button == 3 ? xdiff : 0)),
-				MAX(1, attr.height + (btnEvnt.button == 3 ? ydiff : 0)));
+				lastWidth,
+				lastHeight);
 			
 			if(btnEvnt.button == 1) {
 				if(event.xbutton.y_root <= 1) {
