@@ -8,6 +8,7 @@ Screen *screen;
 
 XEvent event;
 XWindowAttributes attr;
+XWindowAttributes attr1;
 XButtonEvent btnEvnt;
 
 int lastWidth = 0, lastHeight = 0;
@@ -23,7 +24,7 @@ void mainLoop() {
 		if(event.type == KeyPress && event.xkey.subwindow != None) {
 			XRaiseWindow(display, event.xkey.subwindow);
 		} else if(event.type == ButtonPress && event.xbutton.subwindow != None) {
-			XGetWindowAttributes(display, event.xbutton.subwindow, &attr);
+			XGetWindowAttributes(display, event.xbutton.subwindow, &attr1);
 			btnEvnt = event.xbutton;
 		} else if(event.type == MotionNotify && btnEvnt.subwindow != None) {
 			XSetWindowBorderWidth(display, btnEvnt.subwindow, 3);
@@ -45,10 +46,10 @@ void mainLoop() {
 						lastHeight = attr.height;
 					}
 					
-					XMoveResizeWindow(display, btnEvnt.subwindow, MAX(1, attr.x + xdiff), MAX(1, attr.y + ydiff), lastWidth, lastHeight);
+					XMoveResizeWindow(display, btnEvnt.subwindow, MAX(1, attr1.x + xdiff), MAX(1, attr1.y + ydiff), lastWidth, lastHeight);
 				}
 			} else if(btnEvnt.button == 3) {
-				XMoveResizeWindow(display, btnEvnt.subwindow, attr.x, attr.y, MAX(1, attr.width + xdiff), MAX(1, attr.height + ydiff));
+				XMoveResizeWindow(display, btnEvnt.subwindow, attr1.x, attr1.y, MAX(1, attr1.width + xdiff), MAX(1, attr1.height + ydiff));
 			}
 			
 		} else if(event.type == ButtonRelease) {
