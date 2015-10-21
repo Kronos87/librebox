@@ -26,6 +26,8 @@ void mainLoop() {
 			XGetWindowAttributes(display, event.xbutton.subwindow, &attr);
 			btnEvnt = event.xbutton;
 		} else if(event.type == MotionNotify && btnEvnt.subwindow != None) {
+			XSetWindowBorderWidth(display, btnEvnt.subwindow, 3);
+			
 			int xdiff = event.xbutton.x_root - btnEvnt.x_root;
 			int ydiff = event.xbutton.y_root - btnEvnt.y_root;
 			
@@ -37,20 +39,25 @@ void mainLoop() {
 			
 			if(btnEvnt.button == 1) {
 				if(event.xbutton.y_root <= 1) {
-					lastWidth = btnEvnt.subwindow.width;
-					lastHeight = btnEvnt.subwindow.height;
+					XGetWindowAttributes(display, btnEvnt.subwindow, &attr);
+					lastWidth = attr.width;
+					lastHeight = attr.height;
 					XMoveResizeWindow(display, btnEvnt.subwindow, 0, 0, screen->width, screen->height);
 				} else {
 					XMoveResizeWindow(display, btnEvnt.subwindow, MAX(1, attr.x + xdiff), MAX(1, attr.y + ydiff), lastWidth, lastHeight);
 				}
 			} else if(btnEvnt.button == 3) {
-				XMoveResizeWindow(display, btnEvnt.subwindow, attr.x, attr.y, MAX(1, attr.width + xdiff), MAX(1, attr.height + ydiff : 0));
+				XMoveResizeWindow(display, btnEvnt.subwindow, attr.x, attr.y, MAX(1, attr.width + xdiff), MAX(1, attr.height + ydiff));
 			}
 			
 		} else if(event.type == ButtonRelease) {
 			btnEvnt.subwindow = None;
 		}
 	}
+	
+	//Cleanup
+	
+	XCloseDisplay(display);
 }
 
 int main(void) {
