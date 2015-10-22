@@ -15,17 +15,24 @@ int lastWidth = 0, lastHeight = 0;
 
 int loosing = 0;
 
+//int docking_top, docking_bottom, docking_left, docking_right;
+
 void mainLoop() {
+	printf("mainLoop");
 	
-	int running = 1;
-	
-	while(running) {
+	while(1) {
+		printf("before");
+		
 		//Process event
 		XNextEvent(display, &event);
+		
+		printf("after");
 		
 		if(event.type == KeyPress && event.xkey.subwindow != None) {
 			XRaiseWindow(display, event.xkey.subwindow);
 		} else if(event.type == ButtonPress && event.xbutton.subwindow != None) {
+			printf("subwindow: %lu\n", event.xbutton.subwindow);
+			
 			XGetWindowAttributes(display, event.xbutton.subwindow, &attr1);
 			btnEvnt = event.xbutton;
 		} else if(event.type == MotionNotify && btnEvnt.subwindow != None) {
@@ -67,10 +74,6 @@ void mainLoop() {
 			loosing = 1;
 		}
 	}
-	
-	//Cleanup
-	
-	XCloseDisplay(display);
 }
 
 int main(void) {
@@ -82,14 +85,16 @@ int main(void) {
 	screen = DefaultScreenOfDisplay(display);
 	printf("Screen: width=%d, height=%d\n", screen->width, screen->height);
 	
-	
 	XGrabKey(display, XKeysymToKeycode(display, XStringToKeysym("F1")), Mod1Mask, DefaultRootWindow(display), True, GrabModeAsync, GrabModeAsync);
 	XGrabButton(display, 1, Mod1Mask, DefaultRootWindow(display), True, ButtonPressMask|ButtonReleaseMask|PointerMotionMask, GrabModeAsync, GrabModeAsync, None, None);
 	XGrabButton(display, 3, Mod1Mask, DefaultRootWindow(display), True, ButtonPressMask|ButtonReleaseMask|PointerMotionMask, GrabModeAsync, GrabModeAsync, None, None);
-	
+
 	btnEvnt.subwindow = None;
 	
 	mainLoop();
+	
+	//Cleanup
+	XCloseDisplay(display);
 	
 	return 0;
 }
