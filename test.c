@@ -69,7 +69,7 @@ int main(void) {
 		XQueryTree(dpy, XRootWindow(dpy, screen_num), &w_root, &w_parent, &w_children, &no_children);
 	
 		//LBWindow Array
-		LBWindow **windows; 
+		LBWindow *windows = malloc(no_children * sizeof(LBWindow)); 
 		printf("root: %lu | parent: %lu | No. children: %d\n", w_root, w_parent, no_children);
 	
 		int i=0;
@@ -87,6 +87,8 @@ int main(void) {
 		//Am Ende löschen
 		for(i=0;i<no_children;i++)
 			free(windows[i]);
+		
+		free(windows);
 		
 	}
 	
