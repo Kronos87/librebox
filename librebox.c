@@ -15,18 +15,14 @@ int lastWidth = 0, lastHeight = 0;
 
 int loosing = 0;
 
-//int docking_top, docking_bottom, docking_left, docking_right;
+unsigned long docking_top, docking_bottom, docking_left, docking_right;
 
 void mainLoop() {
-	printf("mainLoop");
-	
+
 	while(1) {
-		printf("before");
 		
 		//Process event
 		XNextEvent(display, &event);
-		
-		printf("after");
 		
 		if(event.type == KeyPress && event.xkey.subwindow != None) {
 			XRaiseWindow(display, event.xkey.subwindow);
